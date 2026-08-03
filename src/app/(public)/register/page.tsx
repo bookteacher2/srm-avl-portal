@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Info, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -134,11 +134,8 @@ export default function RegisterPage() {
                     <Field label="Company Name" required error={formState.errors.companyName?.message}>
                       <Input {...register("companyName")} placeholder="e.g. Sunniva Solar Engineering Co., Ltd." />
                     </Field>
-                    <Field label="Tax ID" required error={formState.errors.taxId?.message}>
+                    <Field label="Tax ID / Registration No." required error={formState.errors.taxId?.message}>
                       <Input {...register("taxId")} placeholder="13-digit tax ID" />
-                    </Field>
-                    <Field label="Registration Number" required error={formState.errors.registrationNumber?.message}>
-                      <Input {...register("registrationNumber")} />
                     </Field>
                     <Field label="Year Established" required error={formState.errors.yearEstablished?.message}>
                       <Input type="number" {...register("yearEstablished", { valueAsNumber: true })} placeholder="2015" />
@@ -155,8 +152,18 @@ export default function RegisterPage() {
                     <Field label="Registered Address" required error={formState.errors.registeredAddress?.message} className="sm:col-span-2">
                       <Input {...register("registeredAddress")} />
                     </Field>
-                    <Field label="Business Description" required error={formState.errors.businessDescription?.message} className="sm:col-span-2">
-                      <Textarea {...register("businessDescription")} rows={3} />
+                    <Field
+                      label="Business Description"
+                      required
+                      error={formState.errors.businessDescription?.message}
+                      hint="Describe what your company does: main services, years of experience, key projects or clients, and your coverage area (min. 20 characters)."
+                      className="sm:col-span-2"
+                    >
+                      <Textarea
+                        {...register("businessDescription")}
+                        rows={3}
+                        placeholder="e.g. Solar EPC contractor since 2015, specialising in rooftop and ground-mount PV. Delivered 40+ MW for industrial clients across Central and Eastern Thailand, with in-house electrical and commissioning teams."
+                      />
                     </Field>
                     <div className="sm:col-span-2 rounded-lg bg-muted/50 p-3 text-xs text-muted-foreground">
                       Registration is lightweight. Only your company details, contacts, category and
@@ -382,21 +389,32 @@ function Field({
   label,
   required,
   error,
+  hint,
   children,
   className,
 }: {
   label: string;
   required?: boolean;
   error?: string;
+  /** Optional guidance shown as an info icon (hover) and helper text. */
+  hint?: string;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
     <div className={cn("space-y-1.5", className)}>
-      <Label>
-        {label} {required ? <span className="text-destructive">*</span> : null}
-      </Label>
+      <div className="flex items-center gap-1.5">
+        <Label>
+          {label} {required ? <span className="text-destructive">*</span> : null}
+        </Label>
+        {hint ? (
+          <span title={hint} aria-label={hint} className="cursor-help text-muted-foreground">
+            <Info className="h-3.5 w-3.5" />
+          </span>
+        ) : null}
+      </div>
       {children}
+      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
       {error ? <p className="text-xs text-destructive">{error}</p> : null}
     </div>
   );

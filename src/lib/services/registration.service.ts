@@ -63,7 +63,8 @@ export const registrationService = {
       companyName: input.companyName,
       supplierTypeId: input.supplierTypeId,
       taxId: input.taxId,
-      registrationNumber: input.registrationNumber,
+      // Thailand: company registration number == 13-digit Tax ID.
+      registrationNumber: input.taxId,
       yearEstablished: input.yearEstablished,
       website: input.website || null,
       registeredCapital: input.registeredCapital ?? null,

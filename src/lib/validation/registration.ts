@@ -5,8 +5,9 @@ export const registrationSchema = z
   .object({
     // Step 1 — Company
     companyName: z.string().min(2, "Company name is required"),
+    // In Thailand the 13-digit Tax ID is also the company (juristic person)
+    // registration number, so we capture it once and reuse it as both.
     taxId: z.string().regex(/^\d{13}$/, "Tax ID must be 13 digits"),
-    registrationNumber: z.string().min(5, "Registration number is required"),
     yearEstablished: z
       .number({ invalid_type_error: "Enter a year" })
       .int()
@@ -53,7 +54,6 @@ export const STEP_FIELDS: (keyof RegistrationInput)[][] = [
   [
     "companyName",
     "taxId",
-    "registrationNumber",
     "yearEstablished",
     "registeredAddress",
     "businessDescription",
